@@ -1,6 +1,6 @@
-const loadPhone = async () => {
+const loadPhone = async (brand) => {
 
-    const getResponse = await fetch('https://openapi.programming-hero.com/api/phones?search=iphone')
+const getResponse = await fetch(`https://openapi.programming-hero.com/api/phones?search=${brand}`)
 
     const data = await getResponse.json();
 
@@ -9,11 +9,20 @@ const loadPhone = async () => {
 
 const displayPhones = (phones) => {
 
-    console.log(phones);
+
+    const showAllBtn = document.getElementById('showAllBtn')
+
+    if ( phones.length > 12) {
+        showAllBtn.classList.remove('hidden')
+    } else if( phones.length <= 12) {
+        showAllBtn.classList.add('hidden')
+    }
+    phones = phones.slice(0,12)
+
     
     const parent = document.getElementById('card-Container')
+    parent.textContent =''
     phones.forEach(element => {
-        console.log(element);
 
         const child = document.createElement('div')
 
@@ -25,7 +34,7 @@ const displayPhones = (phones) => {
             </a>
             <div class="px-5 pb-5">
                 <a href="#">
-                    <h5 class="text-2xl poppins-semibold pt-12 tracking-tight text-gray-900 ">${element.phone_name}</h5>
+                    <h5 class="text-2xl poppins-semibold pt-7 tracking-tight text-gray-900 ">${element.phone_name}</h5>
                 </a>
                 <div class="flex items-center mt-2.5 mb-5">
                     <div class="flex items-center space-x-1 rtl:space-x-reverse py-3">
@@ -59,4 +68,15 @@ const displayPhones = (phones) => {
     });
 }
 
-loadPhone()
+const search = document.getElementById('search-btn')
+const searchField = document.getElementById('default-search')
+
+search.addEventListener('click', function(){
+
+    
+    loadPhone(searchField.value)
+})
+
+const loadingToggle = () =>{
+    
+}

@@ -69,7 +69,7 @@ const displayPhones = (phones,showAll) => {
                 </div>
                 <div class="flex items-center justify-between">
                     <span class="text-3xl font-bold text-gray-900">$599</span>
-                    <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Show Details</a>
+                    <a class="text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-8 py-3 text-center me-2 mb-2" onclick="loadDetails('${element.slug}')">Show Details</a>
                 </div>
             </div>
         </div>
@@ -111,3 +111,33 @@ document.getElementById('showAllBtn').addEventListener('click', ()=>{
     searchApi(true)
     // console.log("showAll");
 })
+
+// load details
+
+async function loadDetails(id){
+    const getResponse = await fetch(`https://openapi.programming-hero.com/api/phone/${id}`)
+    const data = await getResponse.json()
+    const phoneInfo = data.data;
+    console.log(phoneInfo);
+    document.getElementById('phone-details-name').innerText = phoneInfo?.name
+    document.getElementById('phone-details-image').setAttribute('src', phoneInfo?.image)
+    document.getElementById('add-details').innerHTML = `
+                    <p class=" text-xl font-bold pb-2 text-black ">Storage :<span class=" text-sm pl-2 text[#706F6F] ">${phoneInfo?.mainFeatures?.storage}</span></p>
+                    <p class=" text-xl font-bold pb-2 text-black ">Display Size : <span class=" text-sm pl-2 text[#706F6F] ">${phoneInfo?.mainFeatures?.displaySize}</span></p>
+                    <p class=" text-xl font-bold pb-2 text-black ">Chipset : <span class=" text-sm pl-2 text[#706F6F] ">${phoneInfo?.mainFeatures?.chipSet}</span></p>
+                    <p class=" text-xl font-bold pb-2 text-black ">Memory : <span class=" text-sm pl-2 text[#706F6F] ">${phoneInfo?.mainFeatures?.memory}</span></p>
+                    <p class=" text-xl font-bold pb-2 text-black ">Slug : <span class=" text-sm pl-2 text[#706F6F] ">${phoneInfo?.slug}</span></p>
+                    <p class=" text-xl font-bold pb-2 text-black ">Bluetooth : <span class=" text-sm pl-2 text[#706F6F] ">${phoneInfo?.others?.Bluetooth}</span></p>
+                    <p class=" text-xl font-bold pb-2 text-black ">Brand : <span class=" text-sm pl-2 text[#706F6F] ">${phoneInfo?.brand}</span></p>
+                    <p class=" text-xl font-bold pb-2 text-black ">GPS : <span class=" text-sm pl-2 text[#706F6F] ">${phoneInfo?.others?.GPS}</span></p>
+                    
+    `
+    
+    document.getElementById('popupModal').classList.remove('hidden')
+}
+
+document.getElementById('closeModal').addEventListener('click',function(){
+    document.getElementById('popupModal').classList.add('hidden')
+
+})
+

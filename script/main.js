@@ -1,23 +1,28 @@
-const loadPhone = async (brand) => {
+const loadPhone = async (brand,showAll) => {
 
 const getResponse = await fetch(`https://openapi.programming-hero.com/api/phones?search=${brand}`)
 
     const data = await getResponse.json();
 
-    displayPhones(data.data)
+    displayPhones(data.data, showAll)
 }
 
-const displayPhones = (phones) => {
+const displayPhones = (phones,showAll) => {
 
 
     const showAllBtn = document.getElementById('showAllBtn')
 
-    if ( phones.length > 12) {
+    if ( phones.length > 12 && !showAll) {
+
         showAllBtn.classList.remove('hidden')
-    } else if( phones.length <= 12) {
+    } else {
         showAllBtn.classList.add('hidden')
+
     }
-    phones = phones.slice(0,12)
+
+    if (!showAll) {
+        phones = phones.slice(0,12)
+    }
 
     
     const parent = document.getElementById('card-Container')
@@ -66,17 +71,32 @@ const displayPhones = (phones) => {
 
         parent.appendChild(child)
     });
+    loadingToggle(false)
 }
 
 const search = document.getElementById('search-btn')
 const searchField = document.getElementById('default-search')
 
-search.addEventListener('click', function(){
+function searchApi(showAll){
 
     
-    loadPhone(searchField.value)
-})
-
-const loadingToggle = () =>{
-    
+    loadPhone(searchField.value,showAll)
+    loadingToggle(true)
 }
+
+const loadingToggle = (isToggled) =>{
+    
+    const parent = document.getElementById('spinner')
+
+    if(isToggled){
+        parent.classList.remove('hidden')
+    }else{
+        parent.classList.add('hidden')
+
+    }
+}
+
+document.getElementById('showAllBtn').addEventListener('click', ()=>{
+    searchApi(true)
+    // console.log("showAll");
+})

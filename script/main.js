@@ -1,3 +1,4 @@
+// load data from api
 const loadPhone = async (brand,showAll) => {
 
 const getResponse = await fetch(`https://openapi.programming-hero.com/api/phones?search=${brand}`)
@@ -5,12 +6,17 @@ const getResponse = await fetch(`https://openapi.programming-hero.com/api/phones
     const data = await getResponse.json();
 
     displayPhones(data.data, showAll)
+
 }
+
+//display data 
 
 const displayPhones = (phones,showAll) => {
 
 
     const showAllBtn = document.getElementById('showAllBtn')
+
+    //display show all button according to data length
 
     if ( phones.length > 12 && !showAll) {
 
@@ -74,6 +80,7 @@ const displayPhones = (phones,showAll) => {
     loadingToggle(false)
 }
 
+//set search logic
 const search = document.getElementById('search-btn')
 const searchField = document.getElementById('default-search')
 
@@ -83,6 +90,8 @@ function searchApi(showAll){
     loadPhone(searchField.value,showAll)
     loadingToggle(true)
 }
+
+//set spinner toggle
 
 const loadingToggle = (isToggled) =>{
     
@@ -95,6 +104,8 @@ const loadingToggle = (isToggled) =>{
 
     }
 }
+
+//show all data according to condition
 
 document.getElementById('showAllBtn').addEventListener('click', ()=>{
     searchApi(true)
